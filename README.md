@@ -1,5 +1,21 @@
 # n8n with PostgreSQL
 
+* [Objective](#objective)
+* [Prerequisites](#prerequisites)
+* [Runnint (step-by-step)](#running-step-by-step)
+    * [Start the application](#start-the-application)
+    * [Stop the application](#stop-the-application)
+    * [Troubleshooting](#troubleshooting)
+    * [Extra](#extra)
+    * [Reference](#reference)
+* [n8n: Initial Setup](#n8n-initial-setup)
+    * [Setup Account](#setup-account)
+    * [Questionaire](#questionaire)
+    * [Activation Key (Advanced Features)](#activation-key-advanced-features)
+* [n8n: First Workflow](#n8n-first-workflow)
+    * [Start from Scratch](#start-from-scratch)
+    * [Start from a Template](#start-from-a-template)
+
 ## Objective
 
 This repository has the objetive to support the students from the AI classes I teach.
@@ -15,7 +31,9 @@ Run n8n locally in the simplest possible way avoiding as much as possible instal
 2) Install [Docker Desktop](https://www.docker.com/)
 * Note on Windows: It requires to restart after installing
 
-## Start the application
+## Running (Step-by-step)
+
+### Start the application
 
 From your TERMINAL, run the following commands:
 
@@ -40,24 +58,56 @@ docker compose up -d
 http://localhost:5678
 ```
 
-## Stop the application
+### Stop the application
 
 When you stop working on it, just stop the containers
 ```
 docker compose stop
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 If you face problems, the logs might be helpful. To check them run
 ```
 docker compose logs -f
 ```
 
-## Extra
+### Extra
 
 The default name of the database, user and password for PostgreSQL can be changed in the [`.env`](.env) file in the current directory.
 
-## Reference
+### Reference
 
 Based on https://github.com/n8n-io/n8n-hosting/tree/main/docker-compose/withPostgres
+
+## n8n: Initial Setup
+
+### Setup Account
+
+Fill your information for setting up your account
+
+<img src="n8n-screenshots/01-setup-account.png" width="300" />
+
+### Questionaire
+
+You can skip this if you want by leving it blank and clicking on "Get Started". Although this is a useful information that helps the n8n team.
+
+<img src="n8n-screenshots/02-questionaire.png" width="300" />
+
+### Activation Key (Advanced Features)
+
+You can get the activation key for FREE to have access to paid features just by providing you email.
+
+If you filled your email just hit "Send me a free license key".
+
+<img src="n8n-screenshots/03-activation-key.png" width="400" />
+
+## n8n: First Workflow
+
+You can
+* Start from Scratch
+* Start from a Template
+
+### Start from Scratch
+
+### Start from a Template
