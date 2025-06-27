@@ -1,6 +1,10 @@
 # n8n with PostgreSQL
 
-Starts n8n with PostgreSQL as database.
+## Objective
+
+This repository has the objetive to support the students from the AI classes I teach.
+
+Run n8n locally in the simplest possible way avoiding as much as possible installing unnecesary things on your Operating System.
 
 ## Prerequisites
 
