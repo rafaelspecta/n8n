@@ -1,0 +1,1804 @@
+{
+  "name": "Agente WhatsApp Empresas",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.data.messageType }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "de7ab981-b5a1-4807-9258-41d389ceed0a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "cb93b76e-f0cf-4c88-a01a-d38a03c42326",
+                    "leftValue": "={{ $json.body.data.messageType }}",
+                    "rightValue": "=audioMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ef3890bd-4aa4-45b5-bd1b-4b8bb56b4259",
+                    "leftValue": "={{ $json.body.data.messageType }}",
+                    "rightValue": "=imageMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        -80
+      ],
+      "id": "45299f5f-7709-4cfe-bff3-51d1b2fe6a1d",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.inputMessage[0] }}",
+        "options": {
+          "systemMessage": "=Siga as instruções abaixo cuidadosamente.\n\nIMPORTANTE\n\nUse sua memória apenas para detalhes do cliente, como nome, endereço, telefone, e-mail e tipo de serviço solicitado.\nQuando o cliente solicitar falar com um humano ou precisar do contato do proprietário, diga que entraremos em contato o mais breve possível e pergunte qual o melhor horário para que o Rafael entre em contato.\nPreste atenção ao identificar um horário: por exemplo, '2 da tarde' significa 14h00.\nSempre verifique se uma reserva foi criada com sucesso usando a ferramenta 'Buscar Reserva' antes de confirmar com o cliente. Se a reserva não foi criada, tente novamente usando a ferramenta 'Criar Reserva'.\nAs mensagens estão sendo enviadas pelo WhatsApp, utilize a formatação de texto adequada, como negrito, itálico, etc.\nAntes de enviar a confirmação da reserva, grave a reserva usando a ferramenta 'Registrar Reserva'.\n\nComo responder quando você receber uma mensagem que comece com: \"Aqui está uma foto para você\"\n\nAgradeça ao cliente por enviar a foto e responda com um comentário breve sobre a descrição da imagem.\nVisão Geral\n\nVocê é Rosa, uma assistente virtual de WhatsApp brasileira para a Verdalia, uma empresa de paisagismo. Seu idioma principal é o português. Sua função é cumprimentar os clientes usando o nome (se disponível), se apresentar como a Assistente Virtual da Verdalia e atender às solicitações dos clientes mantendo um tom profissional, amigável e conciso. Use as ferramentas disponíveis para fornecer um suporte eficiente.\nSua Função\n\nVocê ajuda os clientes com as seguintes tarefas:\n\nAgendar compromissos\nFornecer uma lista dos serviços oferecidos\nResponder a perguntas sobre os serviços\nOferecer assistência profissional\nFazer perguntas de acompanhamento sobre suas dúvidas\nQuando o cliente perguntar sobre preços, informe que os valores variam conforme o serviço; não forneça estimativas!\n\nRegras ao responder os clientes\n\nSempre responda usando o nome do cliente. O primeiro nome do cliente deve ser: {{ $('Switch').item.json.body.data.pushName }}\nSe você não souber o nome do cliente, pergunte educadamente.\n\nForneça um menu claro de opções com emojis para ajudar os clientes a navegar rapidamente. Por exemplo:\n\n<emoji> Agendar um serviço\n<emoji> Falar com um representante humano\n<emoji> Saber mais sobre os serviços da Verdalia\n<emoji> Obter dicas de jardinagem (sempre sugira ajuda profissional da Verdalia)\n<emoji> Acessar faturas e solicitar orçamentos\n\nInformações da Empresa\n\nProprietário: Rafael\nHorário de funcionamento:\n\nSegunda a sexta: 8h às 18h\nSábado: 8h às 12h\nDomingo: fechado\n\nWebsite: https://verdalia.com.br/\nÁrea de atendimento: Tubarão, SC, Brasil e cidades próximas\nE-mail da empresa: contato@verdalia.com.br\n\nNossos Serviços\n\nCorte e manutenção de gramado\nPlantio de grama\nHardscape (pátios, caminhos, muros de contenção)\nIrrigação (instalação e manutenção)\nControle de pragas\nDesign de paisagismo (jardins e áreas personalizadas)\n\nFerramentas\n\nUse 'Buscar Reserva' para obter todas as reservas existentes do calendário. Se não houver eventos no período ou horário solicitado, isso significa que há vagas de horários.\nUse 'Criar Reserva' para criar uma nova reserva.\nUse 'Modificar Reserva' para modificar uma reserva.\nUse 'Excluir Reserva' para cancelar ou excluir uma reserva.\n\nLembretes\n\nConsidere a data e hora atual: {{ $now }}.\nMantenha sempre um tom profissional e acolhedor.\nMantenha as respostas concisas, claras e objetivas.\nVerifique a disponibilidade usando a ferramenta 'Buscar Reserva' antes de agendar.\nColete os dados do cliente (nome, endereço/localização, serviço). Se o cliente enviar uma localização pelo WhatsApp ou um link do Google Maps, não precisa pedir o endereço novamente. Apenas agradeça pela localização.\nMantenha as respostas curtas e objetivas.\nSempre use as ferramentas fornecidas para ações no calendário.\nSe o cliente solicitar falar com um humano, explique que ele pode digitar #atendimento a qualquer momento.\nSe um horário não estiver disponível, sugira alternativas.\nSempre se apresente como Rosa, a Assistente Virtual da Verdalia.\nQuando o cliente solicitar um orçamento ou agendamento, incentive-o a enviar fotos do local que precisa ser atendido. Informe que, para obter uma estimativa, Rafael precisará analisar o serviço solicitado. Pergunte se o cliente prefere mensagens via WhatsApp ou uma ligação.\nQuando uma mensage começar com 'Cliente enviou uma foto, descrição:', isso significa que você está recebendo um descrição feita pela Ia da imagem. Agradeça pela imagem e dê uma breve resposta.\nAntes de enviar a confirmação da reserva, grave a reserva usando a ferramenta 'Registrar Reserva'.\n\nInformações necessárias do cliente ao criar ou atualizar uma reserva:\n\nNome\nEndereço ou localização do WhatsApp\nTipo de serviço\nData e hora do serviço"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1932,
+        -80
+      ],
+      "id": "270a1740-3254-4217-ad33-0f60ba12aba1",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1660,
+        140
+      ],
+      "id": "63b9b7d9-e718-467f-a30b-16942a25b439",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AAV4IpWCwKOZcu14",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1000,
+        -80
+      ],
+      "id": "bfd884ba-8bc8-4292-ba47-0cb5aaeb6274",
+      "name": "OpenAI",
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "AAV4IpWCwKOZcu14",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "input": "={{ $('AI Agent').item.json.output }}",
+        "voice": "nova",
+        "options": {
+          "response_format": "opus"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2800,
+        20
+      ],
+      "id": "d896b15b-354e-4ccc-aee3-1854b5570369",
+      "name": "OpenAI1",
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "AAV4IpWCwKOZcu14",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Switch').item.json.body.data.messageType }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "36bcb096-a6a3-4839-a33c-c3560bbf6fb0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd786ed8-8061-4f41-beae-b4c85ff77f40",
+                    "leftValue": "={{ $('Switch').item.json.body.data.messageType }}",
+                    "rightValue": "audioMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d6003fd1-4fd8-43ce-975c-59aa93945c48",
+                    "leftValue": "={{ $('Switch').item.json.body.data.messageType }}",
+                    "rightValue": "imageMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2580,
+        -80
+      ],
+      "id": "72d51608-e038-47a6-a7d9-6d08b787217c",
+      "name": "Text or Voice Switch"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6e7d23091b94d935bae98b99058d4365",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        340,
+        -80
+      ],
+      "id": "00fbfe0c-3253-4869-9dbe-8a9b9e4f865c",
+      "name": "Webhook",
+      "webhookId": "77debf6f-30b2-40d7-94f6-022f6c449836"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "body.data.message.base64",
+        "options": {
+          "mimeType": "audio/ogg"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        -80
+      ],
+      "id": "3332128c-902c-485e-bd4c-c0c3885e9b12",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "300fc7fd-41f5-4221-bb20-26aaeb565226",
+              "name": "inputMessage",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        -80
+      ],
+      "id": "1d1fc308-89ca-4e92-a775-a039b7930867",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "inputMessage"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -80
+      ],
+      "id": "f83d8480-5dae-43d3-adb9-5ad6003704c3",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "300fc7fd-41f5-4221-bb20-26aaeb565226",
+              "name": "inputMessage",
+              "value": "={{ $json.body.data.message.conversation }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        -280
+      ],
+      "id": "93b20532-ab60-41ed-a80b-aa9eca2c2a5c",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "Verdalia Jardins",
+        "remoteJid": "={{ $('Switch').item.json.body.data.key.remoteJid.replace(/@s\\.whatsapp\\.net$/, '') }}",
+        "messageText": "={{ $json.output }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        -180
+      ],
+      "id": "dcfc33d5-c48a-4591-b5dd-42abde284a6c",
+      "name": "Evolution API",
+      "credentials": {
+        "evolutionApi": {
+          "id": "7XOC7xJyYMP7lQ7h",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-audio",
+        "instanceName": "Verdalia Jardins",
+        "remoteJid": "={{ $('Switch').item.json.body.data.key.remoteJid.replace(/@s\\.whatsapp\\.net$/, '') }}",
+        "media": "={{ $json.data }}",
+        "options_message": {
+          "delay": 1200
+        }
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        3240,
+        20
+      ],
+      "id": "a09bb312-433d-4246-bc7f-df75199a16b4",
+      "name": "Evolution API1",
+      "credentials": {
+        "evolutionApi": {
+          "id": "7XOC7xJyYMP7lQ7h",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        3020,
+        20
+      ],
+      "id": "f92ada4a-4c5c-479d-b532-f80cebd03985",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "O que você nesta imagem?",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1000,
+        120
+      ],
+      "id": "9a456d73-c0a4-443c-9895-79420ba541e9",
+      "name": "OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "AAV4IpWCwKOZcu14",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const base64String = $input.first().json.body.data.message.base64;  // Adjust this path as needed\nconst mimeType = \"image/jpeg\";  // Change as necessary (e.g., audio/mp3)\nconst fileName = \"output.jpg\";  // Adjust the file extension\n\n// Step 1: Validate the base64 string\nif (!base64String || !base64String.match(/^[A-Za-z0-9+/=]+$/)) {\n  throw new Error(\"Invalid base64 string detected\");\n}\n\n// Step 2: Convert base64 to binary\ntry {\n  // Decode the base64 string to binary\n  const binaryData = Buffer.from(base64String, \"base64\");\n\n  // Encode the binary data again to base64 for n8n\n  const base64Binary = binaryData.toString(\"base64\");\n\n  return [\n    {\n      binary: {\n        data: {\n          mimeType: mimeType,\n          fileName: fileName,\n          data: base64Binary,\n        },\n      },\n    },\n  ];\n} catch (error) {\n  throw new Error(\"Error converting base64 to binary: \" + error.message);\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        120
+      ],
+      "id": "303a667d-3d0e-43f1-b76a-53a658013594",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d9e8297a-3661-474a-b8c9-1fdad56ad82d",
+              "name": "inputMessage",
+              "value": "=Cliente enviou uma foto, descrição: {{ $json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        120
+      ],
+      "id": "60db7501-cafa-4673-b565-167be24d763e",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.data.key.remoteJid }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1780,
+        140
+      ],
+      "id": "3571cd4f-fe57-4888-9da9-5697129c30e5",
+      "name": "Memória"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "d24e12f0662262e61ac4df2f332ea3c85ddbc9faccc128ef352e24e0f8384c7b@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Verdalia Jardins"
+        },
+        "start": "={{ $fromAI('start_time') }}",
+        "end": "={{ $fromAI('end_time') }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "attendees": [],
+          "description": "=Servico: {{ $fromAI('customer_details') }}\nTelefone: {{ $('Switch').item.json.body.data.key.remoteJid.replace(/@s\\.whatsapp\\.net$/, '') }}\n",
+          "location": "={{ $fromAI('customer_address') }}",
+          "summary": "={{ $fromAI('customer_name') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1900,
+        140
+      ],
+      "id": "e55d731c-7f64-4bf6-8082-8a650f7d3c71",
+      "name": "Criar Reserva",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "9ZEghK4Ws6EcRJHv",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "d24e12f0662262e61ac4df2f332ea3c85ddbc9faccc128ef352e24e0f8384c7b@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Verdalia Jardins"
+        },
+        "eventId": "={{ $fromAI('event_id') }}",
+        "updateFields": {
+          "description": "=Serviço: {{ $fromAI('customer_details') }}\nTelefone: {{ $('Switch').item.json.body.data.key.remoteJid.replace(/@s\\.whatsapp\\.net$/, '') }}\n",
+          "end": "={{ $fromAI('end_time') }}",
+          "location": "={{ $fromAI('customer_address') }}",
+          "start": "={{ $fromAI('start_time') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2020,
+        140
+      ],
+      "id": "0b87e79e-f732-4eb8-b120-1c3cbf67321e",
+      "name": "Modificar Reserva",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "9ZEghK4Ws6EcRJHv",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "d24e12f0662262e61ac4df2f332ea3c85ddbc9faccc128ef352e24e0f8384c7b@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Verdalia Jardins"
+        },
+        "eventId": "={{ $fromAI('event_id') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2140,
+        140
+      ],
+      "id": "bc414fa0-0cf3-409c-aa92-2365e559eb58",
+      "name": "Excluir Reserva",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "9ZEghK4Ws6EcRJHv",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "d24e12f0662262e61ac4df2f332ea3c85ddbc9faccc128ef352e24e0f8384c7b@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Verdalia Jardins"
+        },
+        "returnAll": true,
+        "options": {
+          "query": "={{ $('Switch').item.json.body.data.key.remoteJid.replace(/@s\\.whatsapp\\.net$/, '') }}\n"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2260,
+        140
+      ],
+      "id": "94163f13-cd4b-43a3-a0cc-bee5d0c7a38b",
+      "name": "Buscar Reserva",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "9ZEghK4Ws6EcRJHv",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 60
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        340,
+        755
+      ],
+      "id": "0c4d0eff-ba2a-45dc-90aa-ec1f17fa1fd2",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY",
+          "mode": "list",
+          "cachedResultName": "Lembrete de reserva",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        560,
+        755
+      ],
+      "id": "d5d3fd47-8311-44ca-bff7-a44917fe0dba",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WRwbBtufpID1uJbw",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "048f252b-b595-45ae-9eb3-557c1c5e852e",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "884c9c33-1656-4b03-aaea-74c6d7fafb7f",
+              "name": "Cliente",
+              "value": "={{ $json.Cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "80283516-d603-4e75-a605-f40bd984a8b8",
+              "name": "Serviço",
+              "value": "={{ $json['Serviço'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7806a51a-8fd3-4413-9c72-1fe20859fe0e",
+              "name": "Horário",
+              "value": "={{ $json['Horário'] }}",
+              "type": "string"
+            },
+            {
+              "id": "fd2ab256-81ea-4d04-a37c-17260b62bacd",
+              "name": "Endereço",
+              "value": "={{ $json['Endereço'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2c1d2f0b-22d1-4759-aaab-e75ea900c44d",
+              "name": "WhatsApp",
+              "value": "={{ $json.WhatsApp }}",
+              "type": "string"
+            },
+            {
+              "id": "1bb6d807-bdec-4316-8a6f-dce3e3739f71",
+              "name": "Confirmado?",
+              "value": "={{ $json['Confirmado?'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        580
+      ],
+      "id": "f4d08b31-1e93-4031-9703-d235e9548040",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "366514bd-9b0c-4bd6-8a29-c1bcda3a8641",
+              "leftValue": "={{ $json['Confirmado?'] }}",
+              "rightValue": "Sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1220,
+        580
+      ],
+      "id": "8b5c35e7-2b76-43ae-ac50-10002c0a2003",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1518,
+        430
+      ],
+      "id": "2218d5b2-25fa-4f50-9fe8-5b74b3fc1bd2",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Informações da reserva:\n\n{{ JSON.stringify($json) }}",
+        "options": {
+          "systemMessage": "=Você é um assistente virtual especializado em confirmação de horários de consulta. Seu objetivo é comunicar-se de forma clara, educada e eficiente, garantindo que os clientes recebam as informações corretas e confirmem sua presença. Ao responder, seja cordial, preciso e ofereça opções de reagendamento se necessário.\n\nHoje é {{ $now }}\n\nVocê é quem mandará a primeira mensagem.\n\nMensagem Template:\nOlá, {{ $json.Cliente }}! 👋\n\nEstamos entrando em contato para confirmar o seu agendamento:\n\n    Serviço: {{ $json['Serviço'] }}\n\n    Horário: {{ $json['Horário'] }}\n\n    Endereço: {{ $json['Endereço'] }}\n\n⚠️ Por favor, confirme sua presença respondendo a esta mensagem.\nCaso precise reagendar ou obter mais informações, estamos à disposição.\n\nAguardamos sua confirmação!\nEquipe Verdalia 🌿"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1440,
+        730
+      ],
+      "id": "734d4e18-03d2-43d7-bd9f-e11f4aaedd17",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1528,
+        950
+      ],
+      "id": "4ac97f2a-610f-4da9-8cea-1c36d43d45ab",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "AAV4IpWCwKOZcu14",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "Verdalia Jardins",
+        "remoteJid": "={{ $('If').item.json.WhatsApp }}",
+        "messageText": "={{ $json.output }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1816,
+        730
+      ],
+      "id": "19543ee8-7e0c-4793-b18e-a793d89d25ba",
+      "name": "Evolution API2",
+      "credentials": {
+        "evolutionApi": {
+          "id": "7XOC7xJyYMP7lQ7h",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "find-messages",
+        "instanceName": "Verdalia Jardins",
+        "remoteJid": "=5511999999999"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        480
+      ],
+      "id": "2dc262e7-322d-445c-9df5-f6cc6ef88014",
+      "name": "Evolution API3",
+      "credentials": {
+        "evolutionApi": {
+          "id": "7XOC7xJyYMP7lQ7h",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2036,
+        730
+      ],
+      "id": "d0822af0-26be-4f65-954b-edea28c78884",
+      "name": "Wait",
+      "webhookId": "9ab2028f-a924-4464-b528-c4c42b7b8c14"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c5439bb5-0662-4239-b685-7d2d458e40b0",
+              "leftValue": "={{ $json.output.confirmacao_reserva }}",
+              "rightValue": "Sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "e33ee384-28c8-4019-b7b0-c2dab6698958",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3072,
+        630
+      ],
+      "id": "94bdf37b-6db6-4de6-b9a4-93432124a67b",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "text": "=Verifique na mensagem do cliente se a resposta é sim ou não.\n\nMensagem do cliente: {{ $json.data.messages.records[0].message.conversation }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "confirmacao_reserva",
+              "description": "Sim | Não",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1,
+      "position": [
+        2696,
+        480
+      ],
+      "id": "884cbacf-d0b8-420f-abc9-15393dca40cc",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b35bbdee-f5b7-4b44-83fe-62ffab772301",
+              "leftValue": "={{ $json.data.messages.records[0].key.fromMe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2476,
+        480
+      ],
+      "id": "bddb4a69-cae7-47c8-8f6c-69448de8a05a",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2784,
+        700
+      ],
+      "id": "eaf20263-6e0d-4b2f-aab0-797f4be9eea9",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "AAV4IpWCwKOZcu14",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY",
+          "mode": "list",
+          "cachedResultName": "Lembrete de reserva",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Confirmado?": "=Sim",
+            "WhatsApp": "={{ $json.WhatsApp }}"
+          },
+          "matchingColumns": [
+            "WhatsApp"
+          ],
+          "schema": [
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Serviço",
+              "displayName": "Serviço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Horário",
+              "displayName": "Horário",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Endereço",
+              "displayName": "Endereço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confirmado?",
+              "displayName": "Confirmado?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3512,
+        905
+      ],
+      "id": "16ea9b9a-8b81-4355-bbba-e5b568b34e2e",
+      "name": "Google Sheets1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WRwbBtufpID1uJbw",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6ca98081-2744-4297-9acb-635b1dd68f95",
+              "name": "WhatsApp",
+              "value": "={{ $('If2').item.json.data.messages.records[0].key.remoteJid.replace(/@s\\.whatsapp\\.net$/, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3292,
+        630
+      ],
+      "id": "381d17b7-31e7-4080-9d9d-a881ec9ad576",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY",
+          "mode": "list",
+          "cachedResultName": "Lembrete de reserva",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JaGIf6OzN0-PRFHXRp57VG5j-_ry6IZUZ9UlJ30ICeY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Dia e Horário": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Dia_e_Hor_rio', `e.g. 15/05/2015 10:00`, 'string') }}",
+            "WhatsApp": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('WhatsApp__using_to_match_', `WhatsApp do cliente, e.g. 554888613250`, 'string') }}",
+            "Cliente": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Cliente', `Primeiro nome do cliente`, 'string') }}",
+            "Serviço": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Servi_o', `Tipo de serviço`, 'string') }}",
+            "Endereço": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Endere_o', `Endereço do serviço`, 'string') }}",
+            "Confirmado?": "Não"
+          },
+          "matchingColumns": [
+            "WhatsApp"
+          ],
+          "schema": [
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Serviço",
+              "displayName": "Serviço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Dia e Horário",
+              "displayName": "Dia e Horário",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Endereço",
+              "displayName": "Endereço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confirmado?",
+              "displayName": "Confirmado?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        2380,
+        140
+      ],
+      "id": "dacba827-055d-4431-bc49-a1105f66c2ee",
+      "name": "Registrar Reserva",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WRwbBtufpID1uJbw",
+          "name": "Youtube"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fa899675-c5eb-4432-a391-143fb51cd9d0",
+              "leftValue": "={{ DateTime.fromFormat($json['Dia e Horário'], 'dd/MM/yyyy hh:mm:ss') }}",
+              "rightValue": "={{ $now.plus(2, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        780,
+        680
+      ],
+      "id": "01f89615-550f-4bf7-9441-73f36b2f22a5",
+      "name": "If3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        880
+      ],
+      "id": "d2f9aaab-9231-4258-bb62-c980266de174",
+      "name": "No Operation, do nothing1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Text or Voice Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text or Voice Switch": {
+      "main": [
+        [
+          {
+            "node": "Evolution API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Evolution API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Evolution API1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memória": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Reserva": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modificar Reserva": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Excluir Reserva": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Reserva": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evolution API": {
+      "main": [
+        []
+      ]
+    },
+    "Evolution API1": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Evolution API2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evolution API2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Evolution API3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evolution API3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Reserva": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bbae41f7-bc30-4e67-b929-53c1b0dd2253",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e644808054a60552235ab3b261b436ffb5c6842e547b255de30f0106351cbc11"
+  },
+  "id": "2FACGPnEc5RNNHnm",
+  "tags": [
+    {
+      "createdAt": "2025-05-15T20:51:34.030Z",
+      "updatedAt": "2025-05-15T20:51:34.030Z",
+      "id": "Wm4tPYeUG9ctp4We",
+      "name": "YouTube"
+    }
+  ]
+}
